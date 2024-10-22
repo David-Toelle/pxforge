@@ -1,0 +1,63 @@
+/* login.css
+   This file contains styles for the login page, including the layout for the login form and input fields.
+*/
+
+/*----------------------------------------------------------------
+    Login Page Layout
+----------------------------------------------------------------*/
+/* Center the login form vertically and horizontally within the page */
+.login-page {
+  height: 80vh; /* Occupies 80% of the viewport height */
+  display: flex; /* Flexbox for centering content */
+  justify-content: center; /* Centers the form horizontally */
+  align-items: center; /* Centers the form vertically */
+  /* margin-top:80px; */ /* Margin (commented out, possibly for future use) */
+}
+
+/*----------------------------------------------------------------
+    Login Form Layout
+----------------------------------------------------------------*/
+/* Styles for the login form container */
+.login-form {
+  /* border: 1px solid red; */ /* Debugging border (commented out) */
+  height: 500px; /* Fixed height for the form */
+  width: 600px; /* Fixed width for the form */
+  background-color: rgb(243, 239, 239); /* Light grey background color */
+  border-radius: 50px; /* Rounded corners for the form */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Adds a subtle shadow for depth */
+  display: flex; /* Flexbox for organizing form content */
+  flex-direction: column; /* Stack the form elements vertically */
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
+}
+
+/*----------------------------------------------------------------
+    Input Fields (Email and Password)
+----------------------------------------------------------------*/
+/* Styles for the input container of both email and password */
+.input-email,
+.input-password {
+  width: 20em; /* Sets a consistent width for input containers */
+  /* height: 90px; */ /* Commented height, could be used for future adjustments */
+  display: flex; /* Flexbox to stack the label and input vertically */
+  flex-direction: column; /* Ensure label is above input field */
+  margin-left: 5em; /* Add padding on the left to center the field */
+  margin-right: 5em; /* Add padding on the right to center the field */
+  margin-bottom: 3em; /* Adds space between input fields */
+}
+
+/* Styles for the input fields inside email and password containers */
+.input-email > input,
+.input-password > input {
+  height: 2em; /* Set a uniform height for the input fields */
+  border-radius: 15px; /* Rounded corners for the input fields */
+  text-align: center;
+}
+
+/*----------------------------------------------------------------
+    Button Styling
+----------------------------------------------------------------*/
+/* Styles for the submit button inside the login form */
+.login-form > button {
+  width: 10em; /* Set a fixed width for the button */
+}

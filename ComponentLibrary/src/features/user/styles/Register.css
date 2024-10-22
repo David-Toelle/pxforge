@@ -1,0 +1,59 @@
+/* register.css
+   This file contains styles for the register page, including the layout for the register form and input fields.
+*/
+
+/*----------------------------------------------------------------
+    Register Page Layout
+----------------------------------------------------------------*/
+/* Center the registration form vertically and horizontally within the page */
+.register-page {
+    height: 80vh;                              /* Occupies 80% of the viewport height */
+    display: flex;                             /* Flexbox for centering content */
+    justify-content: center;                   /* Centers the form horizontally */
+    align-items: center;                       /* Centers the form vertically */
+}
+
+/*----------------------------------------------------------------
+    Register Form Layout
+----------------------------------------------------------------*/
+/* Styles for the registration form container */
+.register-form {
+    height: 500px;                             /* Fixed height for the form */
+    width: 600px;                              /* Fixed width for the form */
+    background-color: rgb(243, 239, 239);      /* Light grey background color */
+    border-radius: 50px;                       /* Rounded corners for the form */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Adds a subtle shadow for depth */
+    display: flex;                             /* Flexbox for organizing form content */
+    flex-direction: column;                    /* Stack the form elements vertically */
+    align-items: center;                       /* Center items horizontally */
+    justify-content: center;                   /* Center items vertically */
+}
+
+/*----------------------------------------------------------------
+    Input Fields (First Name, Last Name, Email, Password)
+----------------------------------------------------------------*/
+/* Styles for input containers (first name, last name, email, password) */
+.input-firstName, .input-lastName, .input-email, .input-password {
+    width: 20em;                               /* Sets a consistent width for input containers */
+    display: flex;                             /* Flexbox to stack the label and input vertically */
+    flex-direction: column;                    /* Ensure label is above input field */
+    margin-left: 5em;                          /* Add padding on the left to center the field */
+    margin-right: 5em;                         /* Add padding on the right to center the field */
+    margin-bottom: 2em;                        /* Adds space between input fields */
+}
+
+/* Styles for the input fields inside the containers */
+.input-firstName > input, .input-lastName > input, .input-email > input, .input-password > input {
+    height: 2em;                               /* Set a uniform height for the input fields */
+    border-radius: 15px;                       /* Rounded corners for the input fields */
+    border: 1px solid rgb(71, 71, 71);         /* Adds a border with a subtle color */
+    text-align: center;
+}
+
+/*----------------------------------------------------------------
+    Button Styling
+----------------------------------------------------------------*/
+/* Styles for the submit button inside the registration form */
+.register-form > button {
+    width: 10em;                               /* Set a fixed width for the button */
+}

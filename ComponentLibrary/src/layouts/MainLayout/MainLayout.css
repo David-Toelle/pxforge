@@ -1,0 +1,102 @@
+/* main-layout.css
+   This file contains the styles for the main layout of the application, including responsive design for different screen sizes.
+*/
+
+/*----------------------------------------------------------------
+    Global Variables
+----------------------------------------------------------------*/
+/* Root-level custom properties for consistent spacing */
+:root {
+  --spacing: 1rem;                             /* Default spacing variable for use throughout the layout */
+}
+
+/*----------------------------------------------------------------
+    Main Layout Structure
+----------------------------------------------------------------*/
+/* Styles for the overall main layout */
+.main-layout {
+  min-height: 100vh;                           /* Ensures the layout takes up the full viewport height */
+  display: flex;                               /* Flexbox to control the layout */
+  flex-direction: column;                      /* Stack the header, content, and footer vertically */
+}
+
+/*----------------------------------------------------------------
+    Header Styling
+----------------------------------------------------------------*/
+/* Styles for the header section */
+.header {
+  background-color: #dadada;                   /* Light grey background for the header */
+  color: white;                                /* White text for contrast */
+  padding: 1rem;                               /* Uniform padding around the header content */
+  text-align: center;                          /* Center-align the text within the header */
+}
+
+/*----------------------------------------------------------------
+    Content and Sidebar Layout
+----------------------------------------------------------------*/
+/* Main content area setup */
+.content {
+  flex: 1;                                     /* Allows the content to expand and fill available space */
+  display: flex;                               /* Flexbox for side-by-side content and sidebar layout */
+  flex-direction: row;                         /* Place the sidebar and main content next to each other */
+}
+
+/* Sidebar styles */
+.sidebar {
+  width: 18vw;                                 /* Sidebar occupies 18% of the viewport width */
+  background-color: #f4f4f4;                   /* Light grey background for the sidebar */
+  padding: 1vw;                                /* Padding inside the sidebar */
+  flex-shrink: 0;                              /* Prevent the sidebar from shrinking when the window is resized */
+}
+
+/* Main content area styles */
+.main-content {
+  flex: 1;                                     /* Main content expands to fill available space */
+  padding: 1rem;                                /* Padding inside the main content area */
+  /* overflow: hidden; */
+}
+
+/*----------------------------------------------------------------
+    Footer Styling
+----------------------------------------------------------------*/
+/* Styles for the footer section */
+.footer {
+  background-color: #dadada;                   /* Light grey background for the footer */
+  color: white;                                /* White text for contrast */
+  padding: 1rem;                               /* Uniform padding around the footer content */
+  text-align: center;                          /* Center-align the text within the footer */
+}
+
+/*----------------------------------------------------------------
+    Responsive Design
+----------------------------------------------------------------*/
+/* Media query for screen widths 1024px and below */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 25vw;                               /* Increase the sidebar width to 25% for medium screens */
+  }
+
+  .main-content {
+    width: 100%;                               /* Ensure main content takes full width */
+  }
+}
+
+/* Media query for screen widths 768px and below */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;                             /* Hide the sidebar on small screens */
+  }
+
+  .main-content {
+    width: 100%;                               /* Ensure main content takes full width */
+    padding: 0.5rem;                           /* Reduce padding for smaller screens */
+  }
+}
+
+/* Media query for screen widths 480px and below */
+@media (max-width: 480px) {
+  .header,
+  .footer {
+    padding: 0.5rem;                           /* Reduce padding for the header and footer on very small screens */
+  }
+}

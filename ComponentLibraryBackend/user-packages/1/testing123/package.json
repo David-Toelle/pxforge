@@ -1,0 +1,7 @@
+{
+  "name": "@pxforge/testing123",
+  "version": "1.0.0",
+  "description": "this his a test package for a cool project ",
+  "main": "index.js",
+  "dependencies": {}
+}

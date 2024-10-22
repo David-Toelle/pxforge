@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  email        String         @unique
+  password     String
+  components   Component[]    // One-to-many relationship with components
+  packages     Package[]      // One-to-many relationship with packages
+}
+
+model Component {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique          // Unique name for the component
+  description String?                    // Optional description
+  code        String                     // JSX/JavaScript code for the component
+  createdAt   DateTime @default(now())   // When the component was created
+  updatedAt   DateTime @updatedAt        // Automatically updates when the component is updated
+  owner       User     @relation(fields: [ownerId], references: [id])  // Relationship to User
+  ownerId     Int
+  packages    Package[] @relation("PackageComponents") // Many-to-many with packages
+}
+
+model Package {
+  id          Int        @id @default(autoincrement())
+  name        String     // Name of the package
+  description String?    // Optional description of the package
+  components  Component[] @relation("PackageComponents") // Many-to-many with components
+  createdAt   DateTime   @default(now()) // When the package was created
+  owner       User       @relation(fields: [ownerId], references: [id]) // Relationship to User
+  ownerId     Int
+}

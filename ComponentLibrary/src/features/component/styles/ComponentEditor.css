@@ -1,0 +1,19 @@
+.preview {
+    height: 20rem;
+    width: 50rem;
+    border: 5px solid red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.component-info {
+    display: flex;
+    flex-direction: column;
+}
+.component-info > textarea {
+    height: 80vh;
+    max-height: 80vh;
+    max-width: 10vw;
+}
+

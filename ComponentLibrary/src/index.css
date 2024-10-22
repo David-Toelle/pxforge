@@ -1,0 +1,34 @@
+/* index.css
+   This is the root CSS file for global styles and variables used throughout the application.
+*/
+
+/*----------------------------------------------------------------
+    Global CSS Variables
+----------------------------------------------------------------*/
+/* Defining root-level custom properties (CSS variables) for consistent theming throughout the app */
+
+:root {
+  --primary: #2e2e2e;                         /* Primary background color (e.g., for headers or primary sections) */
+  --primary-foreground: #ffffff;              /* Primary text color (used on primary background) */
+  
+  --secondary: #97deff;                       /* Secondary background color (e.g., for hover or focus states) */
+  --secondary-foreground: #000000;            /* Secondary text color (used on secondary background) */
+  
+  --background: #ffffff;                      /* Background color for active or selected links */
+  --foreground: #88bcff;                      /* Text color for active or selected links */
+}
+
+/*----------------------------------------------------------------
+    Global Body Styles
+----------------------------------------------------------------*/
+/* Basic reset and global styles for the body element */
+body {
+  margin: 0;                                  /* Remove default margin from the body */
+  padding: 0;                                 /* Remove default padding from the body */
+  box-sizing: border-box;                     /* Ensures padding and border are included in the element's total width and height */
+  font-family: Arial, sans-serif;             /* Set default font for the entire app */
+  line-height: 1.6;                   
+  /* display: flex; */
+  /* justify-content: center;        Define a standard line height for better readability */
+  /* border: 10px solid red; */               /* Debugging border (commented out) */
+}

@@ -1,0 +1,53 @@
+/* src/styles/BasicBtn.css */
+
+/* Basic styles for the button */
+.basic-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+  box-shadow: -10px 10px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive sizes for small, medium, large */
+.basic-btn.small {
+  font-size: 0.8rem;
+  padding: 8px 16px;
+}
+
+.basic-btn.medium {
+  font-size: 1rem;
+  padding: 10px 20px;
+}
+
+.basic-btn.large {
+  font-size: 1.2rem;
+  padding: 12px 24px;
+}
+
+/* Hover animation */
+.basic-btn:hover {
+  background-color: #2980b9;
+  transform: scale(.95) translate(-3px,3px);
+  box-shadow: -6px 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Click (active) animation */
+.basic-btn:active {
+  transform: scale(0.98);
+  background-color: #1c5986;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .basic-btn {
+    font-size: 0.9rem;
+    padding: 8px 18px;
+  }
+}
