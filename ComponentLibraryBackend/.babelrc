@@ -1,0 +1,5 @@
+{
+  "exclude": "node_modules/**",
+//   "babelHelpers": "bundled", // Correct handling for Rollup
+  "presets": ["@babel/preset-react"] // This will handle JSX
+}

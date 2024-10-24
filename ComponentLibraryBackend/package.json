@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server/index.js"
+    "dev": "nodemon --ignore tmp/ server/index.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +13,7 @@
   "dependencies": {
     "@npmcli/arborist": "^8.0.0",
     "@prisma/client": "^5.21.0",
+    "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
@@ -26,6 +27,14 @@
     "pacote": "^20.0.0"
   },
   "devDependencies": {
-    "prisma": "^5.21.0"
+    "@babel/cli": "^7.25.9",
+    "@babel/core": "^7.25.9",
+    "@babel/preset-react": "^7.25.9",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^28.0.1",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "prisma": "^5.21.0",
+    "rollup": "^2.79.2",
+    "rollup-plugin-terser": "^7.0.2"
   }
 }

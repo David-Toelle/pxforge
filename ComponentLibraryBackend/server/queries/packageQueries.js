@@ -1,9 +1,5 @@
 const { prisma } = require("../shared/shared");
-const { exec, spawn } = require("child_process");
 
-const libnpmpublish = require("libnpmpublish");
-const fs = require("fs");
-const path = require("path");
 // Query to create a package
 const createPackage = async (data) => {
   const { name, description, components, ownerId } = data;
@@ -71,67 +67,10 @@ const deletePackage = async (id) => {
   });
 };
 
-// Function to handle publishing a package to NPM
-const publishPackage = async (packageId, userId) => {
-  console.log("Starting the publish process for Package ID:", packageId);
-
-  try {
-    // Fetch package data from your database (replace with your implementation)
-    const packageData = await getPackageById(packageId);
-    if (!packageData) {
-      throw new Error(`Package with ID ${packageId} not found`);
-    }
-
-    const packagePath = path.resolve(
-      `./user-packages/${userId}/${packageData.name
-        .toLowerCase()
-        .replace(/\s+/g, "-")}`
-    );
-    const packageJsonPath = path.join(packagePath, "package.json");
-
-    // Check if package.json exists
-    if (!fs.existsSync(packageJsonPath)) {
-      throw new Error("package.json not found, cannot publish");
-    }
-
-    // Use exec to run npm publish
-    console.log("Publishing the package...");
-    exec(
-      "npm publish --access public",
-      { cwd: packagePath },
-      (error, stdout, stderr) => {
-        if (error) {
-          console.error(`Error during npm publish: ${error.message}`);
-          return;
-        }
-        if (stderr) {
-          console.error(`npm publish stderr: ${stderr}`);
-        }
-        console.log(`npm publish stdout: ${stdout}`);
-      }
-    );
-  } catch (error) {
-    console.error("Error during publish process:", error);
-  }
-};
-
-// Helper function to bundle components for the package
-const generateComponentBundle = (packageData) => {
-  return packageData.components
-    .map((component) => {
-      return `
-      // ${component.name}
-      ${component.code}
-    `;
-    })
-    .join("\n");
-};
-
 module.exports = {
   createPackage,
   getPackagesByUser,
   getPackageById,
   updatePackage,
   deletePackage,
-  publishPackage,
 };

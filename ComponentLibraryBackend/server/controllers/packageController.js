@@ -4,8 +4,15 @@ const {
   getPackageById,
   updatePackage,
   deletePackage,
-  publishPackage,
 } = require("../queries/packageQueries");
+const {
+  checkPackageNameAvailability,
+  generateComponentFiles,
+  bundleWithRollup,
+  publishToNpm,
+  cleanupPackageFiles,
+} = require("../queries/publishingQueries");
+const path = require("path");
 
 // Handle creating a new package
 const createPackageHandler = async (req, res) => {
@@ -90,10 +97,56 @@ const publishPackageHandler = async (req, res) => {
   const userId = req.user.id;
 
   try {
-    await publishPackage(id, userId);
+    // 1. Fetch package data
+    console.log("fetching package data...");
+    const packageData = await getPackageById(id);
+    if (!packageData) {
+      throw new Error(`Package with ID ${id} not found`);
+    }
+    console.log("Package data found :) ");
+    console.log("-----------------------");
+    console.log("-----------------------");
+    console.log("-----------------------");
+
+    // 2. Set path to package
+    console.log("Setting Path...");
+    const packagePath = path.resolve(
+      `./tmp/${userId}/${packageData.name.toLowerCase().replace(/\s+/g, "-")}`
+    );
+    console.log("Path Set: ", packagePath);
+
+    // 3. Check if the package name is available on npm
+    const packageName = packageData.name.toLowerCase().replace(/\s+/g, "-");
+    const isAvailable = await checkPackageNameAvailability(packageName);
+    if (!isAvailable) {
+      return res
+        .status(400)
+        .json({ error: "Package name already exists on npm" });
+    }
+
+    // 3. Create necessary component files and `index.js`
+    console.log("Creating Component Files...");
+    await generateComponentFiles(packageData, packagePath);
+    console.log("Component Files Created :)");
+
+    // 4. Run Rollup to bundle the components
+    console.log("RUNning ROllup....");
+    await bundleWithRollup(packagePath);
+    console.log("Rollup successful :)");
+
+    // 5. Publish to NPM
+    console.log("Publishing to NPM...");
+    await publishToNpm(packagePath);
+    console.log("Published to NPM :)");
+
+    // 6. Cleanup temporary files
+    cleanupPackageFiles(packagePath);
+
+    // 7. Respond to client
     res.status(200).json({ message: "Package published successfully" });
   } catch (error) {
-    res.status(500).json({ error: "Failed to publish package" });
+    console.error("Error during package publish process:", error);
+    res.status(500).json({ error: "Failed to publish package. try another name" });
   }
 };
 
