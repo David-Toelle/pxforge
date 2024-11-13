@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Loading from "@/components/Loading/Loading";
-import PackageCard from "./PackageCard";
+import PackageCard from "./packageCard";
 import PackageDetails from "./PackageDetails";
 import {
   useFetchUserPackagesQuery,
