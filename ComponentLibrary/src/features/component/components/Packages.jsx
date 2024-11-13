@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Loading from "@/components/Loading/Loading";
 import PackageCard from "./packageCard";
-import PackageDetails from "./PackageDetails";
+import PackageDetails from "./packageDetails";
 import {
   useFetchUserPackagesQuery,
   useCreatePackageMutation,
