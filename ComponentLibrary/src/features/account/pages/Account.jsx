@@ -42,8 +42,14 @@ export const Account = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-black p-6 m-0">
-      <Card className="w-full max-w-md p-6 rounded-lg shadow-lg bg-black text-white">
+    <div
+      className="flex items-center justify-center min-h-screen bg-cover bg-center h-screen w-full p-6 m-0"
+      style={{
+        backgroundImage:
+          'url("https://images.unsplash.com/photo-1642355008521-236f1d29d0a8?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
+      }}
+    >
+      <Card className="border border-gray-200 border-opacity-30 w-full max-w-md p-6 rounded-lg shadow-lg bg-black text-white">
         <h2 className="text-xl font-semibold mb-4 text-center">
           Account Information
         </h2>

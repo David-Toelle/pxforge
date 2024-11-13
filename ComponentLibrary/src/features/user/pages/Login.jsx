@@ -74,7 +74,7 @@ const Login = () => {
               />
             </div>
 
-            <div className="flex items-center">
+            <div className="flex items-center justify-center">
               <input
                 type="checkbox"
                 id="remember-me"
@@ -87,12 +87,13 @@ const Login = () => {
                 Remember me
               </label>
             </div>
-
-            <BasicBtn
-              type="submit"
-              label="Login"
-              className="w-full py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:bg-blue-700"
-            />
+            <div className="flex justify-center">
+              <BasicBtn
+                type="submit"
+                label="Login"
+                className="w-full py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:bg-blue-700"
+              />
+            </div>
           </form>
         )}
       </div>

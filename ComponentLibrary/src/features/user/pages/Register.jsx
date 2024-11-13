@@ -108,12 +108,13 @@ const Register = () => {
                 className="w-full p-4 border border-gray-200 rounded-lg text-sm placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white"
               />
             </div>
-
-            <BasicBtn
-              type="submit"
-              label="Register"
-              className="w-full py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:bg-blue-700"
-            />
+            <div className="flex justify-center">
+              <BasicBtn
+                type="submit"
+                label="Register"
+                className="w-full py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:bg-blue-700"
+              />
+            </div>
           </form>
         )}
       </div>
