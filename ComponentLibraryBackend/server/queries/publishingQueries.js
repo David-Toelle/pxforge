@@ -3,33 +3,79 @@ const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
 const rollup = require("rollup");
+const semver = require("semver"); // Import semver
+const { PrismaClient } = require("@prisma/client");
 const rollupConfig = require("../../rollup.config.js");
 
-// Helper function to create component files
-const generateComponentFiles = (packageData, packagePath) => {
+const prisma = new PrismaClient();
+
+// Function to validate that each component file includes a default export
+const validateDefaultExport = (filePath) => {
+  const fileContent = fs.readFileSync(filePath, "utf-8");
+  return fileContent.includes("export default");
+};
+
+const generateComponentFiles = async (packageData, packagePath) => {
   if (!fs.existsSync(packagePath)) {
     fs.mkdirSync(packagePath, { recursive: true });
   }
 
-  // Create individual component files
+  // Check and update version
+  let version = "1.0.0"; // Default version for new packages
+  const existingPackage = await prisma.package.findUnique({
+    where: { id: packageData.id },
+  });
+
+  if (existingPackage) {
+    // If updating, increment the version
+    version = semver.inc(existingPackage.version, "patch"); // Increment patch version for updates
+    await prisma.package.update({
+      where: { id: packageData.id },
+      data: { version },
+    });
+  } else {
+    // For new packages, initialize the version in the database
+    await prisma.package.create({
+      data: {
+        name: packageData.name,
+        version,
+        components: {
+          create: packageData.components.map((comp) => ({
+            name: comp.name,
+            code: comp.code,
+          })),
+        },
+      },
+    });
+  } 
+
+  // Create individual component files and validate default exports
   packageData.components.forEach((component) => {
     const componentFilePath = path.join(packagePath, `${component.name}.jsx`);
     fs.writeFileSync(componentFilePath, component.code);
+
+    // Validate that each component file has a default export
+    if (!validateDefaultExport(componentFilePath)) {
+      throw new Error(`Component ${component.name} does not have a default export.`);
+    }
   });
 
-  // Create index.js that exports the components
+  // Create index.js with sanitized exports
   const indexJsContent = packageData.components
-    .map(
-      (component) =>
-        `export { default as ${component.name} } from './${component.name}.jsx';`
-    )
+    .map((component) => {
+      // Sanitize component name for a valid export identifier
+      const sanitizedName = component.name.replace(/[^a-zA-Z0-9_$]/g, "_");
+
+      return `export { default as ${sanitizedName} } from './${component.name}.jsx';`;
+    })
     .join("\n");
+
   fs.writeFileSync(path.join(packagePath, "index.js"), indexJsContent);
 
-  // **Create package.json**
+  // Create package.json with the correct version
   const packageJsonContent = {
     name: `@pxforge/${packageData.name.toLowerCase().replace(/\s+/g, "-")}`,
-    version: "1.0.0",
+    version: version,
     main: "dist/index.js",
     license: "MIT",
     dependencies: {
@@ -43,14 +89,12 @@ const generateComponentFiles = (packageData, packagePath) => {
   );
 };
 
+
 // Helper function to bundle components with Rollup
 const bundleWithRollup = async (packagePath) => {
   console.log("bundling...", packagePath);
   try {
-    console.log("1");
-    // Run Rollup using the configuration
     if (!fs.existsSync(path.join(packagePath, "index.js"))) {
-      console.log("1111111111");
       throw new Error("Input file does not exist");
     }
     const bundle = await rollup.rollup({
@@ -58,23 +102,10 @@ const bundleWithRollup = async (packagePath) => {
       plugins: rollupConfig.plugins,
       external: rollupConfig.external,
     });
-    console.log("2", bundle);
-    console.log("2");
-    console.log("Attempting to write bundle with these options:", {
-      file: path.join(packagePath, "dist/"),
-      format: "es",
-    });
-    if (fs.existsSync(path.join(packagePath, "dist/index.js"))) {
-      console.log("File already exists:");
-    } else {
-      console.log("File does not exist. Proceeding with writing...");
-    }
     await bundle.write({
       file: path.join(packagePath, "dist/index.js"),
       format: "es", // You can also support CommonJS by adding multiple outputs
     });
-    console.log("3");
-
     console.log("Bundle created successfully!");
   } catch (error) {
     console.error(
@@ -98,6 +129,24 @@ const publishToNpm = (packagePath) => {
         }
         console.log("npm publish stdout:", stdout);
         console.error("npm publish stderr:", stderr);
+        resolve();
+      }
+    );
+  });
+};
+
+const unpublishFromNpm = (packagePath) => {
+  return new Promise((resolve, reject) => {
+    exec(
+      "npm unpublish --force",
+      { cwd: packagePath, shell:true },
+      (error, stdout, stderr) => {
+        if (error) {
+          console.error("Error during npm unpublish:", error);
+          return reject(error);
+        }
+        console.log("npm unpublish stdout:", stdout);
+        console.error("npm unpublish stderr:", stderr);
         resolve();
       }
     );
@@ -129,4 +178,5 @@ module.exports = {
   bundleWithRollup,
   publishToNpm,
   cleanupPackageFiles,
+  unpublishFromNpm,
 };

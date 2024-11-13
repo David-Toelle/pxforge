@@ -10,6 +10,9 @@ import { userApi } from "../features/user/userApi"; // API slice for user-relate
 import componentReducer from "../features/component/componentSlice"; // Reducer for component-related state
 import { componentApi } from "../features/component/componentApi"; // API slice for component-related API calls
 
+import packageReducer from "../features/component/packageSlice";
+import { packageApi } from "../features/component/packageApi";
+
 //----------------------------------------------------------------
 //                Setting up the global store
 //----------------------------------------------------------------
@@ -19,17 +22,20 @@ const store = configureStore({
     // Regular Redux slice reducers:
     user: userReducer, // Manages user-related state (e.g., current user, token)
     component: componentReducer, // Manages component-related state (e.g., current component, library)
+    package: packageReducer, // Add package state management
 
     // RTK Query API slices:
     [userApi.reducerPath]: userApi.reducer, // Handles user-related API calls (login, register)
     [componentApi.reducerPath]: componentApi.reducer, // Handles component-related API calls (create, fetch, update, delete)
+    [packageApi.reducerPath]: packageApi.reducer, // Add package API
   },
 
   // Middleware is used to extend or customize how actions are dispatched and how the store behaves.
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       userApi.middleware,
-      componentApi.middleware // Adds middleware for component-related API calls
+      componentApi.middleware,
+      packageApi.middleware,
       // Add additional middleware here as needed
     ),
 });

@@ -1,66 +1,101 @@
-import React, { useState } from "react"; // Importing React hooks for state management
-import { useLoginMutation } from "../userApi"; // Importing the login mutation from userApi
-import { useDispatch } from "react-redux"; // Redux hook for dispatching actions
-import { useNavigate } from "react-router-dom"; // React Router hook for navigation
-import { setUser } from "../userSlice"; // Importing the setUser action to update the user state
-import "../styles/Login.css"; // Importing the CSS file for styling the login page
-import Loading from "../../../components/Loading/Loading"; // Importing the reusable Loading component
+import React, { useState } from "react";
+import { useLoginMutation } from "../userApi";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setUser } from "../userSlice";
+import "../styles/Login.css";
+import Loading from "../../../components/Loading/Loading";
 import BasicBtn from "../../../components/buttons/BasicBtn/BasicBtn";
-//----------------------------------------------------------------
-//                     Login Component
-//----------------------------------------------------------------
-// This component manages the login form. It handles input fields for email and password, and submits a login request.
+import "preline/dist/preline";
 
 const Login = () => {
-  const [email, setEmail] = useState(""); // Local state to store the email input
-  const [password, setPassword] = useState(""); // Local state to store the password input
-  const [login, { isLoading }] = useLoginMutation(); // Hook for performing the login mutation
-  const dispatch = useDispatch(); // Hook for dispatching Redux actions
-  const navigate = useNavigate(); // Hook for programmatic navigation
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [login, { isLoading }] = useLoginMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // Handle form submission for login
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
     try {
-      // Attempt login with email and password, then update user state on success
       const user = await login({ email, password }).unwrap();
-      dispatch(setUser({ user, token: user.token })); // Dispatch setUser action to store user data and token
-      navigate("/"); // Navigate to home page after successful login
+      dispatch(setUser({ user, token: user.token }));
+      navigate("/");
     } catch (err) {
-      console.error("Failed to log in:", err); // Log any errors encountered during login
+      console.error("Failed to log in:", err);
     }
   };
 
   return (
-    <div className="login-page">
-      {/* Conditionally show the loading spinner if the login is in progress */}
-      {isLoading ? (
-        <Loading size="60px" color="#3498db" />
-      ) : (
-        <form className="login-form" onSubmit={handleLogin}>
-          {/* Email input field */}
-          <div className="input-email">
-            <label>Email:</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)} // Update email state on input change
+    <div className="relative min-h-screen flex items-center justify-center bg-black">
+      <div className="max-w-md w-full bg-black rounded-2xl shadow-lg p-6 border border-gray-200 border-opacity-20 dark:border-gray-700 dark:border-opacity-20">
+        {isLoading ? (
+          <Loading size="60px" color="#3498db" />
+        ) : (
+          <form className="space-y-6" onSubmit={handleLogin}>
+            <h2 className="text-3xl font-bold text-center text-white dark:text-white border-b border-gray-200 dark:border-gray-700">
+              Login
+            </h2>
+            <p className="text-center text-sm text-gray-600 dark:text-neutral-400">
+              Ready to get started?{" "}
+              <a
+                href="/register"
+                className="text-blue-600 hover:underline font-medium dark:text-blue-500"
+              >
+                Sign up here
+              </a>
+            </p>
+
+            <div>
+              <label htmlFor="email" className="sr-only">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email address"
+                className="w-full p-4 border border-gray-200 border-opacity-20 dark:border-gray-700 dark:border-opacity-20 rounded-lg text-sm placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="sr-only">
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                className="w-full p-4 border border-gray-200 border-opacity-20 dark:border-gray-700 dark:border-opacity-20 rounded-lg text-sm placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:text-white"
+              />
+            </div>
+
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="remember-me"
+                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:bg-neutral-900 dark:border-gray-700"
+              />
+              <label
+                htmlFor="remember-me"
+                className="ml-2 text-sm text-gray-600 dark:text-neutral-400"
+              >
+                Remember me
+              </label>
+            </div>
+
+            <BasicBtn
+              type="submit"
+              label="Login"
+              className="w-full py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:bg-blue-700"
             />
-          </div>
-          {/* Password input field */}
-          <div className="input-password">
-            <label>Password:</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)} // Update password state on input change
-            />
-          </div>
-          {/* Submit button, disabled while login request is in progress */}
-          
-          <BasicBtn type="submit"  label="Login" size="medium" ></BasicBtn>
-        </form>
-      )}
+          </form>
+        )}
+      </div>
     </div>
   );
 };

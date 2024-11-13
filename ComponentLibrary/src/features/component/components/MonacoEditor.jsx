@@ -16,7 +16,7 @@ function MonacoEditor({ codeFromDB, onSave }) {
 
   const handleSaveClick = () => {
     onSave(code); // Pass the current code to save
-  };
+  };  
 
   // Ensure the code is only updated with `codeFromDB` once
   useEffect(() => {

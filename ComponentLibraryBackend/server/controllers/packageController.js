@@ -11,8 +11,10 @@ const {
   bundleWithRollup,
   publishToNpm,
   cleanupPackageFiles,
+  unpublishFromNpm,
 } = require("../queries/publishingQueries");
 const path = require("path");
+const { exec } = require("child_process");
 
 // Handle creating a new package
 const createPackageHandler = async (req, res) => {
@@ -84,9 +86,35 @@ const deletePackageHandler = async (req, res) => {
   const { id } = req.params;
 
   try {
+    // Fetch package details to construct npm package name
+    const packageData = await getPackageById(parseInt(id));
+    if (!packageData) {
+      return res.status(404).json({ error: "Package not found" });
+    }
+
+    // Set the package path and npm package name
+    const packagePath = path.resolve(
+      `./tmp/${packageData.ownerId}/${packageData.name
+        .toLowerCase()
+        .replace(/\s+/g, "-")}`
+    );
+    const npmPackageName = `@pxforge/${packageData.name
+      .toLowerCase()
+      .replace(/\s+/g, "-")}`;
+
+    // Attempt npm unpublish
+    console.log(`Unpublishing package from npm: ${npmPackageName}`);
+    await unpublishFromNpm(packagePath);
+
+    // If successful, delete the package locally
     await deletePackage(parseInt(id));
-    res.status(200).json({ message: "Package deleted successfully" });
+
+    // Respond with success
+    res
+      .status(200)
+      .json({ message: "Package successfully deleted from npm and database" });
   } catch (error) {
+    console.error("Error during package delete process:", error);
     res.status(500).json({ error: "Failed to delete package" });
   }
 };

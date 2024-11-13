@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // Function to get the token from localStorage
-const getAuthToken = () => {
+export const getAuthToken = () => {
   return localStorage.getItem("authToken");
 };
 

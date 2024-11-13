@@ -8,6 +8,8 @@ import routes from "./routes"; // Importing the route configuration
 import { Provider } from "react-redux"; // Provider to give Redux store access throughout the app
 import "./index.css"; // Global CSS styles
 import store from "./store/store"; // Redux store
+import "preline/dist/preline";
+
 
 //----------------------------------------------------------------
 //               Application Rendering and Setup

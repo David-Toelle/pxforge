@@ -1,91 +1,122 @@
-import { useState } from "react"; // Importing React hooks for state management
-import { useRegisterMutation } from "../userApi"; // Importing the register mutation from userApi
-import { useDispatch } from "react-redux"; // Redux hook for dispatching actions
-import { setUser } from "../userSlice"; // Importing the setUser action to update the user state
-import { useNavigate } from "react-router-dom"; // React Router hook for navigation
-import "../styles/Register.css"; // Importing the CSS file for styling the register page
-import Loading from "../../../components/Loading/Loading"; // Importing the reusable Loading component
+import React, { useState } from "react";
+import { useRegisterMutation } from "../userApi";
+import { useDispatch } from "react-redux";
+import { setUser } from "../userSlice";
+import { useNavigate } from "react-router-dom";
+import "../styles/Register.css";
+import Loading from "../../../components/Loading/Loading";
 import BasicBtn from "../../../components/buttons/BasicBtn/BasicBtn";
-//----------------------------------------------------------------
-//                    Register Component
-//----------------------------------------------------------------
-// This component manages the registration form. It handles input fields for first name, last name, email, and password, and submits a register request.
+import "preline/dist/preline";
 
 const Register = () => {
-  const [firstName, setFirstName] = useState(""); // Local state to store the first name input
-  const [lastName, setLastName] = useState(""); // Local state to store the last name input
-  const [email, setEmail] = useState(""); // Local state to store the email input
-  const [password, setPassword] = useState(""); // Local state to store the password input
-  const [register, { isLoading }] = useRegisterMutation(); // Hook for performing the register mutation
-  const dispatch = useDispatch(); // Hook for dispatching Redux actions
-  const navigate = useNavigate(); // Hook for programmatic navigation
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [register, { isLoading }] = useRegisterMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // Handle form submission for registration
   const handleRegister = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
     try {
-      // Attempt registration with user data, then update user state on success
       const user = await register({
         firstName,
         lastName,
         email,
         password,
       }).unwrap();
-      dispatch(setUser({ user, token: user.token })); // Dispatch setUser action to store user data and token 
-      navigate("/"); // Navigate to home page after successful registration
+      dispatch(setUser({ user, token: user.token }));
+      navigate("/");
     } catch (err) {
-      console.error("Failed to register:", err); // Log any errors encountered during registration
+      console.error("Failed to register:", err);
     }
   };
 
   return (
-    <div className="register-page">
-      {/* Conditionally show the loading spinner if the registration is in progress */}
-      {isLoading ? (
-        <Loading size="60px" color="#3498db" />
-      ) : (
-        <form className="register-form" onSubmit={handleRegister}>
-          {/* First Name input field */}
-          <div className="input-firstName">
-            <label>First Name:</label>
-            <input
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)} // Update firstName state on input change
+    <div className="relative min-h-screen flex items-center justify-center bg-black">
+      <div className="max-w-md w-full bg-black rounded-2xl shadow-lg p-6 border border-gray-200 border-opacity-20">
+        {isLoading ? (
+          <Loading size="60px" color="#3498db" />
+        ) : (
+          <form className="space-y-6" onSubmit={handleRegister}>
+            <h2 className="text-3xl font-bold text-center text-white dark:text-white border-b">
+              Register
+            </h2>
+            <p className="text-center text-sm text-gray-600 dark:text-neutral-400">
+              Already have an account?{" "}
+              <a
+                href="/login"
+                className="text-blue-600 hover:underline font-medium dark:text-blue-500"
+              >
+                Log in here
+              </a>
+            </p>
+
+            <div>
+              <label htmlFor="firstName" className="sr-only">
+                First Name
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="First Name"
+                className="w-full p-4 border border-gray-200 rounded-lg text-sm placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="lastName" className="sr-only">
+                Last Name
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Last Name"
+                className="w-full p-4 border border-gray-200 rounded-lg text-sm placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="email" className="sr-only">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email address"
+                className="w-full p-4 border border-gray-200 rounded-lg text-sm placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="sr-only">
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                className="w-full p-4 border border-gray-200 rounded-lg text-sm placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white"
+              />
+            </div>
+
+            <BasicBtn
+              type="submit"
+              label="Register"
+              className="w-full py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:bg-blue-700"
             />
-          </div>
-          {/* Last Name input field */}
-          <div className="input-lastName">
-            <label>Last Name:</label>
-            <input
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)} // Update lastName state on input change
-            />
-          </div>
-          {/* Email input field */}
-          <div className="input-email">
-            <label>Email:</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)} // Update email state on input change
-            />
-          </div>
-          {/* Password input field */}
-          <div className="input-password">
-            <label>Password:</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)} // Update password state on input change
-            />
-          </div>
-          {/* Submit button, disabled while registration request is in progress */}
-          
-          <BasicBtn type="submit" label="Register" size="medium"></BasicBtn>
-        </form>
-      )}
+          </form>
+        )}
+      </div>
     </div>
   );
 };

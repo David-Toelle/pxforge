@@ -3,7 +3,7 @@
 /* Basic styles for the button */
 .basic-btn {
   padding: 10px 20px;
-  font-size: 1rem;
+  font-size: .8rem;
   font-weight: bold;
   border: none;
   border-radius: 5px;

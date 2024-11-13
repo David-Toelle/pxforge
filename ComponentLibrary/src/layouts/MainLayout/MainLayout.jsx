@@ -1,57 +1,60 @@
-// MainLayout.jsx
-// This component serves as the main layout for pages. It includes a navigation bar, main content area, and footer.
-// The layout adapts based on user authentication status to show appropriate links (login, register, account, logout).
-import { useEffect } from 'react' 
-import "./MainLayout.css"; 
-import { Nav, NavLink } from "../../components/NavBar/NavBar";
-import { logout, restoreLogin } from "../../features/user/userSlice"; 
-import { useDispatch, useSelector } from "react-redux"; // Importing hooks for dispatching actions and accessing state
-import { useNavigate } from "react-router-dom"; // Importing navigation hook for redirecting
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { restoreLogin, logout } from "../../features/user/userSlice";
+import Sidebar from "../../components/ui/sidebar";
+import { MenuIcon } from "lucide-react";
 
-// MainLayout component
-// This layout wraps around the content of any page it is applied to and includes navigation and a footer.
 const MainLayout = ({ children }) => {
-  const dispatch = useDispatch(); // Dispatch hook to trigger actions like logout
-  const navigate = useNavigate(); // Navigation hook for redirecting to other pages
-  const isAuthenticated = useSelector((state) => state.user?.isAuthenticated); // Accessing user authentication status from Redux state
+  const [isSidebarVisible, setSidebarVisible] = useState(true);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isAuthenticated = useSelector((state) => state.user?.isAuthenticated);
 
-  // Restore login state when app loads
   useEffect(() => {
     dispatch(restoreLogin());
   }, [dispatch]);
 
-  // Handle user logout
   const handleLogout = () => {
-    navigate("/"); // Redirects the user to the home page after logging out
-    dispatch(logout()); // Dispatches the logout action to update the user state
-    console.log("logged out");
+    dispatch(logout());
+    navigate("/");
+  };
+
+  const toggleSidebar = () => {
+    setSidebarVisible(!isSidebarVisible);
   };
 
   return (
-    <div className="main-layout">
-      <Nav>
-        {/* Navigation links - displayed based on user authentication status */}
-        <NavLink to="/">Home</NavLink>
-        {!isAuthenticated && <NavLink to="/login">Login</NavLink>}
-        {!isAuthenticated && <NavLink to="/register">Register</NavLink>}
-        {isAuthenticated && <NavLink to="/account">Account</NavLink>}
-        {isAuthenticated && <NavLink onClick={handleLogout}>Logout</NavLink>}
-        {/* Show logout link if user is authenticated */}
-        {isAuthenticated && (
-          <NavLink to="/components/library">My Library</NavLink>
-        )}
-      </Nav>
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Fixed Sidebar */}
+      <Sidebar
+        isAuthenticated={isAuthenticated}
+        onLogout={handleLogout}
+        isVisible={isSidebarVisible}
+        className="fixed top-0 left-0 h-full w-64 bg-gray-900 z-50"
+      />
 
-      <div className="content">
-        {/* Sidebar can be added here if needed, currently commented out */}
-        {/* <aside className="sidebar">Sidebar</aside> */}
+      {/* Main Content Area with Toggle Button */}
+      <div
+        className={`transition-all duration-300 ${
+          isSidebarVisible ? "w-[calc(100%-16rem)] ml-64" : "w-full"
+        }`}
+      >
+        {/* Relative wrapper for the button and main content */}
+        <div className="relative">
+          {/* Toggle Icon */}
+          <button
+            onClick={toggleSidebar}
+            className="absolute top-6 left-6 p-1 text-gray-700 bg-gray-200 rounded-md z-50"
+            aria-label="Toggle Sidebar"
+          >
+            <MenuIcon className="h-8 w-7" />
+          </button>
 
-        {/* Main content area where child components are rendered */}
-        <main className="main-content">{children}</main>
+          {/* Main Content */}
+          <main className="m-0">{children}</main>
+        </div>
       </div>
-
-      {/* Footer section */}
-      <footer className="footer">Footer</footer>
     </div>
   );
 };

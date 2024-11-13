@@ -38,7 +38,8 @@ model Component {
 model Package {
   id          Int        @id @default(autoincrement())
   name        String     // Name of the package
-  description String?    // Optional description of the package
+  description String?    // Optional description of the 
+  version     String   @default("1.0.0")
   components  Component[] @relation("PackageComponents") // Many-to-many with components
   createdAt   DateTime   @default(now()) // When the package was created
   owner       User       @relation(fields: [ownerId], references: [id]) // Relationship to User
