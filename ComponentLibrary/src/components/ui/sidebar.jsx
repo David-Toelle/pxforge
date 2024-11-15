@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 const Sidebar = ({ isAuthenticated, onLogout, isVisible }) => {
   return (
     <div
-      className={`fixed z-50 w-64 h-full bg-zinc-800 border-r border-gray-200 border-opacity-50 text-gray-100 flex flex-col
+      className={`fixed z-50 w-64 h-full bg-black border-r border-gray-200 border-opacity-50 text-gray-100 flex flex-col
         transform transition-transform duration-300
         ${isVisible ? "translate-x-0" : "-translate-x-full"}`}
     >

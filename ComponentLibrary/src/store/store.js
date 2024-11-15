@@ -1,7 +1,7 @@
 // store.js
 // This is the Redux store setup. It integrates RTK Query API slices and standard reducers.
 
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 
 // Importing reducers for managing the state
 import userReducer from "../features/user/userSlice"; // Reducer for user-related state (e.g., authentication)
@@ -14,29 +14,38 @@ import packageReducer from "../features/component/packageSlice";
 import { packageApi } from "../features/component/packageApi";
 
 //----------------------------------------------------------------
+//               Combining Reducers and Setting Up Root Reducer
+//----------------------------------------------------------------
+const appReducer = combineReducers({
+  // Regular Redux slice reducers:
+  user: userReducer,
+  component: componentReducer,
+  package: packageReducer,
+
+  // RTK Query API slices:
+  [userApi.reducerPath]: userApi.reducer,
+  [componentApi.reducerPath]: componentApi.reducer,
+  [packageApi.reducerPath]: packageApi.reducer,
+});
+
+// Root reducer to reset state on logout
+const rootReducer = (state, action) => {
+  if (action.type === "user/logout") {
+    state = undefined; // Reset the state when logout action is dispatched
+  }
+  return appReducer(state, action);
+};
+
+//----------------------------------------------------------------
 //                Setting up the global store
 //----------------------------------------------------------------
-
 const store = configureStore({
-  reducer: {
-    // Regular Redux slice reducers:
-    user: userReducer, // Manages user-related state (e.g., current user, token)
-    component: componentReducer, // Manages component-related state (e.g., current component, library)
-    package: packageReducer, // Add package state management
-
-    // RTK Query API slices:
-    [userApi.reducerPath]: userApi.reducer, // Handles user-related API calls (login, register)
-    [componentApi.reducerPath]: componentApi.reducer, // Handles component-related API calls (create, fetch, update, delete)
-    [packageApi.reducerPath]: packageApi.reducer, // Add package API
-  },
-
-  // Middleware is used to extend or customize how actions are dispatched and how the store behaves.
+  reducer: rootReducer, // Use root reducer with reset logic
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       userApi.middleware,
       componentApi.middleware,
-      packageApi.middleware,
-      // Add additional middleware here as needed
+      packageApi.middleware
     ),
 });
 
@@ -47,14 +56,11 @@ export default store;
 //---------------------------------------------
 
 // 1. **Reducers**:
-//    - A reducer is a function that takes the current state and an action as input, then returns a new state.
-//    - `userReducer` manages user-related state (e.g., authentication, token storage).
-//    - `componentReducer` manages component-related state (e.g., current component, status, error).
+//    - Combined all slice reducers using `combineReducers`.
+//    - Added a `rootReducer` function to handle state reset on logout by setting `state = undefined` when `user/logout` is dispatched.
 
 // 2. **API Slices (RTK Query)**:
-//    - API slices are used to handle API calls with RTK Query. They generate hooks for making HTTP requests in components.
-//    - The `userApi` and `componentApi` handle the interactions with the backend for user authentication and component management, respectively.
+//    - API slices continue to handle API interactions using generated hooks for requests like login and register.
 
 // 3. **Middleware**:
-//    - Middleware is added to handle async actions, caching, and refetching of API data.
-//    - RTK Query provides middleware for each API slice, which helps manage network interactions.
+//    - Middleware is used for handling async actions, caching, and data refetching through RTK Query.

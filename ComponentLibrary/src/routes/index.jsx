@@ -6,7 +6,6 @@
 import { homeRoutes } from "./HomeRoutes.jsx"; 
 import { accountRoutes } from "./AccountRoutes.jsx";
 import { userRoutes } from "./UserRoutes.jsx"; // Routes related to user authentication (login, register)
-import { myLibraryRoutes } from "./MyLibraryRoutes.jsx";
 import { componentRoutes } from "./ComponentRoutes.jsx";
 
 // Combining all routes into a single array
@@ -14,7 +13,6 @@ const routes = [
   ...homeRoutes, 
   ...userRoutes, 
   ...accountRoutes, 
-  ...myLibraryRoutes,
   ...componentRoutes,
   // Spread in all routes
   {
