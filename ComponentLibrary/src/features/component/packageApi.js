@@ -6,7 +6,7 @@ export const packageApi = createApi({
   reducerPath: "packageApi",
 
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3001/api/packages",
+    baseUrl: "https://pxforge.onrender.com/api/packages",
     prepareHeaders: (headers) => {
       const token = getAuthToken();
       if (token) {

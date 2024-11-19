@@ -20,11 +20,13 @@ function MonacoEditor({ codeFromDB, onSave }) {
 
   // Ensure the code is only updated with `codeFromDB` once
   useEffect(() => {
-    if (codeFromDB && !initialized) {
+    if (codeFromDB && !initialized && codeFromDB !== code) {
+      // Ensure only updates if codeFromDB has data and it's not already set
       updateCode(codeFromDB); // Set the initial code from DB
       setInitialized(true); // Mark as initialized to prevent re-running
     }
-  }, [codeFromDB, initialized, updateCode]);
+  }, [codeFromDB, initialized, code, updateCode]);
+
 
   return (
     <SandpackStack style={{ height: "80vh", margin: 0 }}>

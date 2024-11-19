@@ -4,6 +4,7 @@
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"; // Importing RTK Query functions for API management
 
+
 //----------------------------------------------------------------
 //                 User API Setup
 //----------------------------------------------------------------
@@ -15,7 +16,7 @@ export const userApi = createApi({
 
   // `baseQuery`: Configures the base URL for the API requests
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3001/", // The base URL for user-related API requests
+    baseUrl: "https://pxforge.onrender.com/",
   }),
 
   // `endpoints`: Defines the API operations (login and registration) as mutations

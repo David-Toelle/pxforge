@@ -9,7 +9,7 @@ export const componentApi = createApi({
   reducerPath: "componentApi",
 
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3001/api",
+    baseUrl: "https://pxforge.onrender.com/api",
     prepareHeaders: (headers) => {
       const token = getAuthToken();
       if (token) {

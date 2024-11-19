@@ -85,7 +85,7 @@ const PackageDetails = ({ pkg, onClose }) => {
       <h2 className="text-3xl font-bold text-white">
         Name: {updatedPackage?.name || pkg.name}
       </h2>
-      <p className="text-gray-400 mt-2">
+      <p className="text-gray-400 mt-2"> 
         Version: {updatedPackage?.version || pkg.version}
       </p>
       <p className="text-gray-400 mt-2">
