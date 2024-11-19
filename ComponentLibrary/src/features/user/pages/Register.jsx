@@ -46,7 +46,7 @@ const Register = () => {
             <p className="text-center text-sm text-gray-600 dark:text-neutral-400">
               Already have an account?{" "}
               <a
-                href="/login"
+                href="https://pxforge.netlify.app/login"
                 className="text-blue-600 hover:underline font-medium dark:text-blue-500"
               >
                 Log in here
