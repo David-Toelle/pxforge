@@ -38,12 +38,13 @@ const Login = () => {
             </h2>
             <p className="text-center text-sm text-gray-600 dark:text-neutral-400">
               Ready to get started?{" "}
-              <a
-                href="https://pxforge.netlify.app/register"
+              <button
+                type="button"
+                onClick={() => navigate("/register")}
                 className="text-blue-600 hover:underline font-medium dark:text-blue-500"
               >
                 Sign up here
-              </a>
+              </button>
             </p>
 
             <div>
