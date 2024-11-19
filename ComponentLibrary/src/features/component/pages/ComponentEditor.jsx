@@ -86,14 +86,14 @@ export default function MySandPack() {
           onChange={(e) => setComponentName(e.target.value)}
           className="w-50 h-10 p-4 mr-3 border border-gray-200 rounded-lg text-sm placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white"
         />
-        <Button
+        {/* <Button
           className="w-20 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:bg-blue-700"
           onClick={handleSave}
         >
           Save
-        </Button>
+        </Button> */}
         <Button
-          className="w-20 py-3 ml-3 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:bg-red-700"
+          className="w-20 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:bg-red-700"
           onClick={onClose}
         >
           Back

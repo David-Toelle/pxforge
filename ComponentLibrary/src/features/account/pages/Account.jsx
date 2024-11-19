@@ -1,8 +1,6 @@
-// AccountPage.jsx
-
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setUser, logout } from "../../user/userSlice";
+import { setUser } from "../../user/userSlice";
 import { Button } from "../../../components/ui/button";
 import { Card } from "../../../components/ui/card";
 import { Input } from "../../../components/ui/input";
@@ -10,10 +8,10 @@ import { useForm } from "react-hook-form";
 
 export const Account = () => {
   const dispatch = useDispatch();
-  const { user, isAuthenticated } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user); // Access user data from Redux store
+  const [isEditing, setIsEditing] = useState(false); // State to control edit mode
 
-  // Local state to handle form data
-  const [isEditing, setIsEditing] = useState(false);
+  // React Hook Form setup with default values from user data
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
       firstName: user?.firstName || "",
@@ -23,7 +21,7 @@ export const Account = () => {
     },
   });
 
-  // Populate the form when user data changes
+  // Update form fields when user data changes
   useEffect(() => {
     reset({
       firstName: user?.firstName || "",
@@ -32,12 +30,18 @@ export const Account = () => {
     });
   }, [user, reset]);
 
+  // Toggle edit mode
   const handleEditToggle = () => {
     setIsEditing((prev) => !prev);
   };
 
+  // Handle form submission and update user data in Redux state
   const onSubmit = (data) => {
-    dispatch(setUser({ user: data })); // Here you would typically also send this to an API
+    const userData = {
+      ...data,
+      token: user.token, // Preserve existing token
+    };
+    dispatch(setUser({ user: userData }));
     setIsEditing(false);
   };
 
@@ -49,59 +53,64 @@ export const Account = () => {
           'url("https://images.unsplash.com/photo-1642355008521-236f1d29d0a8?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
       }}
     >
-      <Card className="border border-gray-200 border-opacity-30 w-full max-w-md p-6 rounded-lg shadow-lg bg-black text-white">
-        <h2 className="text-xl font-semibold mb-4 text-center">
+      <Card className="border border-gray-200 border-opacity-30 w-full max-w-lg p-6 rounded-lg shadow-lg bg-black text-white">
+        <h2 className="text-2xl font-semibold mb-4 text-center">
           Account Information
         </h2>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* First Name */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* First Name Field */}
           <div>
-            <label className="block text-sm">First Name</label>
+            <label className="block text-sm font-medium mb-1">First Name</label>
             <Input
               type="text"
               {...register("firstName")}
-              className="w-full mt-1 p-2 bg-black borders focus:ring-2 focus:ring-blue-600"
+              className={`w-full mt-1 p-3 bg-gray-800 text-white rounded-lg ${
+                isEditing ? "focus:ring-2 focus:ring-blue-600" : ""
+              }`}
               disabled={!isEditing}
             />
           </div>
 
-          {/* Last Name */}
+          {/* Last Name Field */}
           <div>
-            <label className="block text-sm">Last Name</label>
+            <label className="block text-sm font-medium mb-1">Last Name</label>
             <Input
               type="text"
               {...register("lastName")}
-              className="w-full mt-1 p-2 bg-black borders focus:ring-2 focus:ring-blue-600"
+              className={`w-full mt-1 p-3 bg-gray-800 text-white rounded-lg ${
+                isEditing ? "focus:ring-2 focus:ring-blue-600" : ""
+              }`}
               disabled={!isEditing}
             />
           </div>
 
-          {/* Email */}
+          {/* Email Field */}
           <div>
-            <label className="block text-sm">Email</label>
+            <label className="block text-sm font-medium mb-1">Email</label>
             <Input
               type="email"
               {...register("email")}
-              className="w-full mt-1 p-2 bg-black borders text-white focus:ring-2 focus:ring-blue-600"
+              className={`w-full mt-1 p-3 bg-gray-800 text-white rounded-lg ${
+                isEditing ? "focus:ring-2 focus:ring-blue-600" : ""
+              }`}
               disabled={!isEditing}
             />
           </div>
 
-          {/* Password */}
+          {/* Password Field (Visible only when editing) */}
           {isEditing && (
             <div>
-              <label className="block text-sm">Password</label>
+              <label className="block text-sm font-medium mb-1">Password</label>
               <Input
                 type="password"
                 {...register("password")}
-                className="w-full mt-1 p-2 bg-black borders focus:ring-2 focus:ring-blue-600"
+                className="w-full mt-1 p-3 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-blue-600"
               />
             </div>
           )}
 
           {/* Edit and Save Buttons */}
-          <div className="flex justify-between mt-4">
+          <div className="flex justify-between mt-6">
             <Button
               type="button"
               onClick={handleEditToggle}
@@ -109,7 +118,6 @@ export const Account = () => {
             >
               {isEditing ? "Cancel" : "Edit"}
             </Button>
-
             {isEditing && (
               <Button
                 type="submit"
@@ -124,5 +132,3 @@ export const Account = () => {
     </div>
   );
 };
-
-
