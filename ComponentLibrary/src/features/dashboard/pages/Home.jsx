@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux"; // Import useSelector to access the Redux state
 
 export const Home = () => {
+  const { isAuthenticated } = useSelector((state) => state.user); // Access isAuthenticated state
+
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center h-screen w-full text-white p-6 m-0"
@@ -18,7 +21,7 @@ export const Home = () => {
         components into packages and publish directly to npm.
       </p>
       <Link
-        to="/components/library"
+        to={isAuthenticated ? "/components/library" : "/login"} // Conditional navigation
         className="px-6 py-3 bg-white text-black font-semibold rounded hover:bg-opacity-80 transition-opacity"
       >
         Get Started
