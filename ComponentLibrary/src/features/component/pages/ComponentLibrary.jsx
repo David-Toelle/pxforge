@@ -1,15 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFetchComponentsQuery } from "../componentApi";
 import { Packages } from "../components/Packages";
 import { Components } from "../components/Components";
+
 const ComponentLibrary = () => {
   const navigate = useNavigate();
   const {
     data: components = [],
     isLoading,
     isError,
+    refetch, // Refetch method
   } = useFetchComponentsQuery();
+
+  useEffect(() => {
+    refetch(); // Refetch components whenever this page is rendered
+  }, [refetch]);
 
   const handleEdit = (component) => {
     navigate(`/components/${component.id}/edit`);
@@ -32,8 +38,8 @@ const ComponentLibrary = () => {
         isLoading={isLoading}
         handleNewComponent={handleNewComponent}
         handleEdit={handleEdit}
-      ></Components>
-      <Packages components={components} isLoading={isLoading}></Packages>
+      />
+      <Packages components={components} isLoading={isLoading} />
     </div>
   );
 };

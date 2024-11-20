@@ -19,6 +19,10 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    if (password.length < 7) {
+      alert("Password must be at least 7 characters.");
+      return;
+    }
     try {
       const user = await register({
         firstName,
@@ -29,9 +33,16 @@ const Register = () => {
       dispatch(setUser({ user, token: user.token }));
       navigate("/");
     } catch (err) {
-      console.error("Failed to register:", err);
+      if (err.data?.message?.includes("Email already in use")) {
+        alert(
+          "This email is already registered. Please log in or use a different email."
+        );
+      } else {
+        alert("An error occurred during registration. Please try again.");
+      }
     }
   };
+
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-black">
@@ -108,7 +119,13 @@ const Register = () => {
                 placeholder="Password"
                 className="w-full p-4 border border-gray-200 rounded-lg text-sm placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white"
               />
+              {password.length > 0 && password.length < 7 && (
+                <p className="text-red-500 text-sm">
+                  Password must be at least 7 characters.
+                </p>
+              )}
             </div>
+
             <div className="flex justify-center">
               <BasicBtn
                 type="submit"

@@ -8,7 +8,11 @@ import {
 } from "../packageApi";
 
 export const Packages = () => {
-  const { data: packages = [], isLoading } = useFetchUserPackagesQuery();
+  const {
+    data: packages = [],
+    isLoading,
+    refetch,
+  } = useFetchUserPackagesQuery(); // Include refetch
   const [createPackage] = useCreatePackageMutation();
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [isCreatingNewPackage, setIsCreatingNewPackage] = useState(false);
@@ -45,6 +49,9 @@ export const Packages = () => {
       // Reset fields and close the creation form
       setNewPackageData({ name: "", description: "" });
       setIsCreatingNewPackage(false);
+
+      // Refetch packages to update the UI
+      refetch();
     } catch (error) {
       console.error("Failed to create package:", error);
     }

@@ -22,9 +22,14 @@ const Login = () => {
       dispatch(setUser({ user, token: user.token }));
       navigate("/");
     } catch (err) {
-      console.error("Failed to log in:", err);
+      if (err.data?.message?.includes("Invalid credentials")) {
+        alert("Incorrect email or password. Please try again.");
+      } else {
+        alert("An error occurred during login. Please try again.");
+      }
     }
   };
+
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-black">
