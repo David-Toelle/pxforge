@@ -103,8 +103,8 @@ const deletePackageHandler = async (req, res) => {
       .replace(/\s+/g, "-")}`;
 
     // Attempt npm unpublish
-    console.log(`Unpublishing package from npm: ${npmPackageName}`);
-    await unpublishFromNpm(packagePath);
+    // console.log(`Unpublishing package from npm: ${npmPackageName}`);
+    // await unpublishFromNpm(packagePath);
 
     // If successful, delete the package locally
     await deletePackage(parseInt(id));
