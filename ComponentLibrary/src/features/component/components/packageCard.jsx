@@ -17,6 +17,7 @@ const PackageCard = ({ pkg, onEdit }) => {
         await deletePackage(pkg.id).unwrap();
         console.log("Package deleted successfully");
       } catch (error) {
+        alert("Failed to delete package. Try again later.")
         console.error("Failed to delete package:", error);
       }
     }

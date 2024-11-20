@@ -21,23 +21,17 @@ const PackageDetails = ({ pkg, onClose }) => {
   const { data: components = [] } = useFetchComponentsQuery();
   const [updatePackage] = useUpdatePackageMutation();
   const [publishPackage] = usePublishPackageMutation();
-  const { data: updatedPackage, refetch } = useFetchPackageByIdQuery(pkg.id); // Fetch latest package details
+  const { data: updatedPackage, refetch } = useFetchPackageByIdQuery(pkg.id);
 
   const [selectedComponents, setSelectedComponents] = useState([]);
   const [packageComponents, setPackageComponents] = useState(
     pkg.components || []
   );
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [publishing, setPublishing] = useState(false); // Track publishing state
   const [publishStatus, setPublishStatus] = useState("");
 
   useEffect(() => {
-    if (isDrawerOpen) {
-      setSelectedComponents(packageComponents);
-    }
-  }, [isDrawerOpen, packageComponents]);
-
-  useEffect(() => {
-    // Update displayed package details whenever updatedPackage changes
     if (updatedPackage) {
       setPackageComponents(updatedPackage.components);
     }
@@ -70,13 +64,24 @@ const PackageDetails = ({ pkg, onClose }) => {
   };
 
   const handlePublish = async () => {
+    setPublishing(true); // Disable button and show "Publishing..."
+    setPublishStatus(""); // Clear previous status
     try {
       await publishPackage(pkg.id).unwrap();
       setPublishStatus("Package published successfully!");
-      refetch(); // Refetch the latest package details
+      refetch();
     } catch (error) {
-      console.error("Failed to publish package:", error);
-      setPublishStatus("Failed to publish package. Please try again.");
+      // Handle specific error for package name issues
+      if (error.data?.error === "Failed to publish package. try another name") {
+        alert(
+          "The package name is invalid or already in use. Please try another name."
+        );
+      } else {
+        alert("Failed to publish the package. Please try again.");
+      }
+      setPublishStatus("Failed to publish package.");
+    } finally {
+      setPublishing(false); // Re-enable the button
     }
   };
 
@@ -85,7 +90,7 @@ const PackageDetails = ({ pkg, onClose }) => {
       <h2 className="text-3xl font-bold text-white">
         Name: {updatedPackage?.name || pkg.name}
       </h2>
-      <p className="text-gray-400 mt-2"> 
+      <p className="text-gray-400 mt-2">
         Version: {updatedPackage?.version || pkg.version}
       </p>
       <p className="text-gray-400 mt-2">
@@ -166,8 +171,9 @@ const PackageDetails = ({ pkg, onClose }) => {
         <Button
           className="py-2 px-4 bg-blue-600 text-white rounded-lg"
           onClick={handlePublish}
+          disabled={publishing} // Disable button when publishing
         >
-          Publish to NPM
+          {publishing ? "Publishing..." : "Publish to NPM"}
         </Button>
       </div>
       {publishStatus && (
