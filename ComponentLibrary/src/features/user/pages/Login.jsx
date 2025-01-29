@@ -11,25 +11,27 @@ import "preline/dist/preline";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // ✅ New state for error messages
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setErrorMessage(""); // ✅ Clear error before new attempt
+
     try {
       const user = await login({ email, password }).unwrap();
       dispatch(setUser({ user, token: user.token }));
       navigate("/");
     } catch (err) {
       if (err.data?.message?.includes("Invalid credentials")) {
-        alert("Incorrect email or password. Please try again.");
+        setErrorMessage("Incorrect email or password. Please try again.");
       } else {
-        alert("An error occurred during login. Please try again.");
+        setErrorMessage("An error occurred during login. Please try again.");
       }
     }
   };
-
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-black">
@@ -80,19 +82,13 @@ const Login = () => {
               />
             </div>
 
-            <div className="flex items-center justify-center">
-              <input
-                type="checkbox"
-                id="remember-me"
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:bg-neutral-900 dark:border-gray-700"
-              />
-              <label
-                htmlFor="remember-me"
-                className="ml-2 text-sm text-gray-600 dark:text-neutral-400"
-              >
-                Remember me
-              </label>
-            </div>
+            {/* ✅ Error message section (Replaces "Remember me") */}
+            {errorMessage && (
+              <div className="text-red-500 text-sm text-center">
+                {errorMessage}
+              </div>
+            )}
+
             <div className="flex justify-center">
               <BasicBtn
                 type="submit"

@@ -54,7 +54,7 @@ const Sidebar = ({ isAuthenticated, onLogout, isVisible }) => {
             </NavLink>
             <button
               onClick={onLogout}
-              className="flex items-center px-4 py-2 text-gray-100 hover:bg-gray-700 transition-colors duration-150"
+              className="flex items-center w-full px-4 py-2 text-gray-100 hover:bg-gray-700 transition-colors duration-150"
             >
               <LogOutIcon className="mr-3 h-5 w-5" />
               Logout
