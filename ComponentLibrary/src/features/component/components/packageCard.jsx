@@ -25,7 +25,7 @@ const PackageCard = ({ pkg, onEdit }) => {
 
   return (
     <div className="w-full p-4 bg-gray-800 rounded-lg shadow-md">
-      <h2 className="text-xl font-bold text-white">Name: {pkg.name}</h2>
+      <h2 className="truncate text-xl font-bold text-white">Name: {pkg.name}</h2>
       <p className="text-gray-400 mt-2">
         Version: {truncate(pkg.version, 100)}
       </p>

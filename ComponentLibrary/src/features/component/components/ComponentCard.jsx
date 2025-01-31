@@ -16,7 +16,7 @@ const ComponentCard = ({ component, onEdit }) => {
   };
 
   return (
-    <div className="component-card bg-zinc-800 text-white border border-opacity-20 relative">
+    <div className="component-card bg-black text-white border border-opacity-20 relative">
       {/* Delete Button */}
       <button
         onClick={handleDelete}
@@ -26,7 +26,7 @@ const ComponentCard = ({ component, onEdit }) => {
         X
       </button>
       {/* Component Details */}
-      <h2>{component.name}</h2>
+      <h2 className="truncate">{component.name}</h2>
       <button
         onClick={onEdit}
         className="mt-2 px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
